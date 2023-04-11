@@ -17,5 +17,5 @@ jobs:
         with:
           pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
 
-      - name: List sites
+      - name: Migrate Santa Barbara Civil Cases via Terminus Drush
         run: terminus drush jcc-santabarbara.develop -- migrate:import case_node_civil_cases --continue-on-failure
