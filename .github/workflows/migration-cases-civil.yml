@@ -1,7 +1,7 @@
 name: "Migrate civil cases"
 on:
   schedule:
-    - cron:  '*/5 * * * *'    # At every 15th minute
+    - cron:  '*/10 * * * *'    # at every 10 minutes
 
 jobs:
   terminus_drush:
@@ -18,4 +18,4 @@ jobs:
           pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
 
       - name: List sites
-        run: terminus site:list
+        run: terminus drush jcc-santabarbara.develop -- migrate:import case_node_civil_cases --continue-on-failure
