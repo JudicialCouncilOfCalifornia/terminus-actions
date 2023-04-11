@@ -11,7 +11,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
-
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PANTHEON_SSH_KEY }}
+          config: ${{ secrets.SSH_CONFIG }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: Install Terminus
         uses: pantheon-systems/terminus-github-actions@main
         with:
