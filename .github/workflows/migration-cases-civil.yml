@@ -1,7 +1,7 @@
 name: "Migrate civil cases"
 on:
   schedule:
-    - cron:  '*/10 * * * *'    # at every 10 minutes
+    - cron:  '*/30 * * * *'    # at every 10 minutes
 
 jobs:
   terminus_drush:
