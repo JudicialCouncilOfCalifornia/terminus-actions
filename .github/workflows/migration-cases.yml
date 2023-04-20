@@ -4,13 +4,13 @@ on:
     - cron:  '*/20 * * * *'    # at every 30 minutes
 
 jobs:
-  terminus_drush:
+  migrate_cases:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         court: [santabarbara]
         server: [develop]
-    name: Migrating ${{ matrix.court }} cases in ${{ matrix.server }}
+    name: ${{ matrix.court }}.${{ matrix.server }}
     
     steps:
       - name: Setup PHP
