@@ -1,7 +1,7 @@
 name: "Migrate civil cases"
 on:
   schedule:
-    - cron:  '1 1 * * *'    # at every 30 minutes
+    - cron:  '*/20 * * * *'    # at every 30 minutes
 
 jobs:
   terminus_drush:
@@ -23,3 +23,6 @@ jobs:
 
       - name: Migrate Santa Barbara Civil Cases via Terminus Drush
         run: terminus drush jcc-santabarbara.develop -- migrate:import case_node_civil_cases --continue-on-failure
+
+      - name: Migrate Santa Barbara Criminal Cases via Terminus Drush
+        run: terminus drush jcc-santabarbara.develop -- migrate:import case_node_criminal_cases --continue-on-failure
