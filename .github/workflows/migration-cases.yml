@@ -29,6 +29,6 @@ jobs:
         with:
           pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
       - name: Migrate Civil Cases
-        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_civil_cases --update --continue-on-failure --feedback="1000 items" --quiet
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_civil_cases --continue-on-failure
       - name: Migrate Criminal Cases
-        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_criminal_cases --update --continue-on-failure --feedback="1000 items" --quiet
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_criminal_cases --continue-on-failure
