@@ -1,8 +1,9 @@
 name: "Migrate cases"
 on:
-  workflow_dispatch
-#   schedule:
-#     - cron:  '*/3 * * * *'    # at every 30 minutes
+  workflow_dispatch:
+  
+  schedule:
+    - cron:  '*/20 * * * *'
 
 jobs:
   migrate_cases:
