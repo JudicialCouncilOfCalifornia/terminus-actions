@@ -1,7 +1,7 @@
 name: "Migrate cases"
 on:
   schedule:
-    - cron:  '*/20 * * * *'    # at every 30 minutes
+    - cron:  '*/3 * * * *'    # at every 30 minutes
 
 jobs:
   migrate_cases:
