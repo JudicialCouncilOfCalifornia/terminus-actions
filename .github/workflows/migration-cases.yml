@@ -28,6 +28,11 @@ jobs:
         uses: pantheon-systems/terminus-github-actions@main
         with:
           pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+      - name: Stop running migrations
+        continue-on-error: true
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_civil_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_criminal_cases
       - name: Migrate Civil Cases
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_civil_cases --continue-on-failure --sync
