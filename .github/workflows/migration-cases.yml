@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [santabarbara, stanislaus]
+        court: [santabarbara, stanislaus, delnorte]
         server: [develop]
     name: ${{ matrix.court }}.${{ matrix.server }}
     
@@ -33,14 +33,20 @@ jobs:
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_civil_cases
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_criminal_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_traffic_cases
       - name: Reset migrations
         continue-on-error: true
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_civil_cases
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_criminal_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_traffic_cases
       - name: Migrate Civil Cases
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_civil_cases --continue-on-failure --sync
       - name: Migrate Criminal Cases
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_criminal_cases --continue-on-failure --sync
+      - name: Migrate Traffic Cases
+        continue-on-error: true
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_traffic_cases --continue-on-failure --sync
+
