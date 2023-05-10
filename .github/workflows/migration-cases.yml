@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   
   schedule:
-    - cron:  '*/30 * * * *'
+    - cron:  '0 * * * *'
 
 jobs:
   migrate_cases:
@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         court: [santabarbara, stanislaus, delnorte]
-        server: [develop]
+        server: [develop, live]
     name: ${{ matrix.court }}.${{ matrix.server }}
     
     steps:
