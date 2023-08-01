@@ -1,0 +1,14 @@
+name: KeepAlive Github Actions
+on:
+  workflow_dispatch:
+  
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  cronjob-based-github-action:
+    name: Commit a dummy entry to keep-alive Github Actions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: gautamkrishnar/keepalive-workflow@v1
