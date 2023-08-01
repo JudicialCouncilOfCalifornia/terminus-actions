@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         court: [santabarbara, stanislaus, delnorte]
-        server: [develop, live]
+        server: [live]
     name: ${{ matrix.court }}.${{ matrix.server }}
     
     steps:
@@ -49,4 +49,4 @@ jobs:
       - name: Migrate Traffic Cases
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_traffic_cases --continue-on-failure --sync
-
+      - uses: gautamkrishnar/keepalive-workflow@v1
