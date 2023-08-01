@@ -49,4 +49,3 @@ jobs:
       - name: Migrate Traffic Cases
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_traffic_cases --continue-on-failure --sync
-      - uses: gautamkrishnar/keepalive-workflow@v1
