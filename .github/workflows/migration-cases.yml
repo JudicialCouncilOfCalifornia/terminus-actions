@@ -42,10 +42,10 @@ jobs:
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_traffic_cases
       - name: Migrate Civil Cases
         continue-on-error: true
-        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_civil_cases --continue-on-failure --sync
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_civil_cases
       - name: Migrate Criminal Cases
         continue-on-error: true
-        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_criminal_cases --continue-on-failure --sync
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_criminal_cases
       - name: Migrate Traffic Cases
         continue-on-error: true
-        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_traffic_cases --continue-on-failure --sync
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_traffic_cases
