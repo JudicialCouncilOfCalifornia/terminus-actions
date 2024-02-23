@@ -31,19 +31,14 @@ jobs:
       - name: Stop running migrations
         continue-on-error: true
         run: |
-          terminus drush jcc-courts.${{ matrix.server }} -- migrate:stop courts_node_job
-          terminus drush jcc-appellate.${{ matrix.server }} -- migrate:stop appellate_node_job
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_job
       - name: Reset migrations
         continue-on-error: true
         run: |
-          terminus drush jcc-courts.${{ matrix.server }} -- migrate:reset courts_node_job
-          terminus drush jcc-appellate.${{ matrix.server }} -- migrate:reset appellate_node_job
-      - name: Migrate All Jobs
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_job
+      - name: Migrate Jobs
         continue-on-error: true
-        run: terminus drush jcc-courts.${{ matrix.server }} -- migrate:import courts_node_job
-      - name: Migrate Appellate Jobs
-        continue-on-error: true
-        run: terminus drush jcc-appellate.${{ matrix.server }} -- migrate:import appellate_node_job
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import ${{ matrix.court }}_node_job
       - name: Clear cache
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
