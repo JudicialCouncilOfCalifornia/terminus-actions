@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         court: [courts, appellate]
-        server: [develop, epic-uat]
+        server: [develop, epic-uat, stage]
     name: ${{ matrix.court }}.${{ matrix.server }}
     
     steps:
