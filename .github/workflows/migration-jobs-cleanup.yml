@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   
   schedule:
-    - cron:  '40 18 * * *'
+    - cron:  '0 16 * * *'
 
 jobs:
   migrate_cases:
@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         court: [courts, appellate]
-        server: [live]
+        server: [develop]
     name: ${{ matrix.court }}.${{ matrix.server }}
     
     steps:
@@ -36,6 +36,9 @@ jobs:
         continue-on-error: true
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_job
+      - name: Rollback Jobs to delete removed postings with no deadlines
+        continue-on-error: true
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback ${{ matrix.court }}_node_job
       - name: Migrate Jobs
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import ${{ matrix.court }}_node_job
