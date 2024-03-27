@@ -1,4 +1,4 @@
-name: "Migrate jobs"
+name: "Remove Expired Jobs"
 on:
   workflow_dispatch:
   
@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         court: [courts, appellate]
-        server: [stage]
+        server: [live]
     name: ${{ matrix.court }}.${{ matrix.server }}
     
     steps:
@@ -36,7 +36,7 @@ jobs:
         continue-on-error: true
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_job
-      - name: Rollback Jobs to delete removed postings with no deadlines
+      - name: Rollback Jobs to delete removed postings
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback ${{ matrix.court }}_node_job
       - name: Migrate Jobs
