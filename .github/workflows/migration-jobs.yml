@@ -1,0 +1,44 @@
+name: "Migrate jobs"
+on:
+  workflow_dispatch:
+  
+  schedule:
+    - cron:  '40 18 * * *'
+
+jobs:
+  migrate_cases:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        court: [courts, appellate]
+        server: [live]
+    name: ${{ matrix.court }}.${{ matrix.server }}
+    
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PANTHEON_SSH_KEY }}
+          config: ${{ secrets.SSH_CONFIG }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+      - name: Install Terminus
+        uses: pantheon-systems/terminus-github-actions@main
+        with:
+          pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+      - name: Stop running migrations
+        continue-on-error: true
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_job
+      - name: Reset migrations
+        continue-on-error: true
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_job
+      - name: Migrate Jobs
+        continue-on-error: true
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import ${{ matrix.court }}_node_job
+      - name: Clear cache
+        continue-on-error: true
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
