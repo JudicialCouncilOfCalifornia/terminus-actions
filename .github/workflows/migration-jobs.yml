@@ -1,4 +1,4 @@
-name: "Migrate jobs every day at 10:40a UTC"
+name: "Migrate jobs every day at 10:40a PST"
 on:
   workflow_dispatch:
   
