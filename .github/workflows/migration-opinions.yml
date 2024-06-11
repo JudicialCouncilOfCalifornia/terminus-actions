@@ -1,0 +1,65 @@
+name: "Migrate opinions every hour between 6:00a to 5:00p UTC"
+on:
+  workflow_dispatch:
+  
+  schedule:
+    - cron:  '0 15-1 * * *'
+
+jobs:
+  migrate_cases:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        court: [courts]
+        server: [epic-uat]
+    name: ${{ matrix.court }}.${{ matrix.server }}
+    
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PANTHEON_SSH_KEY }}
+          config: ${{ secrets.SSH_CONFIG }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+      - name: Install Terminus
+        uses: pantheon-systems/terminus-github-actions@main
+        with:
+          pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+      - name: Stop running migrations
+        continue-on-error: true
+        run: |
+
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_opinion_published
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_opinion_published_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_opinion_unpublished
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_opinion_unpublished_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_file_opinion_citing
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_media_opinion_citing
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_opinion_citing
+      - name: Reset migrations
+        continue-on-error: true
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_opinion_published
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_opinion_published_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_opinion_unpublished
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_opinion_unpublished_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_file_opinion_citing
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_media_opinion_citing
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_opinion_citing
+      - name: Get new opinions and delete ones that are no longer needed for courts.ca.gov
+        continue-on-error: true
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_unpublished
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_unpublished_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_file_opinion_citing
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_media_opinion_citing
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_citing
+      - name: Clear cache
+        continue-on-error: true
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
