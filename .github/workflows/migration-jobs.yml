@@ -1,4 +1,4 @@
-name: "Migrate jobs"
+name: "Migrate jobs every day at 10:40a UTC"
 on:
   workflow_dispatch:
   
@@ -36,9 +36,9 @@ jobs:
         continue-on-error: true
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_job
-      - name: Migrate Jobs
+      - name: Get new job postings and delete ones that are outdated
         continue-on-error: true
-        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import ${{ matrix.court }}_node_job
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update --delete ${{ matrix.court }}_node_job
       - name: Clear cache
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
