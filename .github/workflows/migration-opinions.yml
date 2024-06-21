@@ -1,9 +1,9 @@
-name: "Migrate opinions every hour between 7:00a to 3:00p PST"
+name: "Migrate opinions 1 minute past every hour during office hours"
 on:
   workflow_dispatch:
   
   schedule:
-    - cron:  '0 13-23 * * *'
+    - cron:  '1 13-23 * * *'
 
 jobs:
   migrate_cases:
