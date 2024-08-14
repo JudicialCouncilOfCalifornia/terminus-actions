@@ -6,7 +6,7 @@ on:
     - cron:  '*/5 * * * *'
 
 jobs:
-  migrate_cases:
+  run_cron:
     runs-on: ubuntu-latest
     strategy:
       matrix:
