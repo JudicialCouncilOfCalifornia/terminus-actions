@@ -34,6 +34,7 @@ jobs:
 
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_opinion_published
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_opinion_published_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_opinion_published_archive
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_opinion_unpublished
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_opinion_unpublished_review
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_file_opinion_citing
@@ -44,6 +45,7 @@ jobs:
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_opinion_published
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_opinion_published_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_opinion_published_archive
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_opinion_unpublished
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_opinion_unpublished_review
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_file_opinion_citing
@@ -54,6 +56,7 @@ jobs:
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published_archive
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_unpublished
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_unpublished_review
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_file_opinion_citing
