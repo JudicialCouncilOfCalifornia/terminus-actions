@@ -1,4 +1,4 @@
-name: "Migrate opinions 1 minute past every hour during office hours"
+name: "Migrate granicus events every hour between 6:00a-4:00p"
 on:
   workflow_dispatch:
   

@@ -1,19 +1,19 @@
-name: "Migrate all Solano cases"
+name: "Migrate granicus events every 2 hours between 6:00a-4:00p"
 on:
   workflow_dispatch:
 
   schedule:
-    - cron:  '0 7 * * *'
+    - cron:  '0 13-23/2 * * *'
 
 jobs:
   migrate_cases:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [solano]
-        server: [live]
+        court: [courts]
+        server: [epic-uat]
     name: ${{ matrix.court }}.${{ matrix.server }}
-
+    
     steps:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -31,18 +31,14 @@ jobs:
       - name: Stop running migrations
         continue-on-error: true
         run: |
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_all_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop ${{ matrix.court }}_node_event_granicus
       - name: Reset migrations
         continue-on-error: true
         run: |
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_all_cases
-      - name: Rollback migrations
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_event_granicus
+      - name: Get new job postings and delete ones that are outdated
         continue-on-error: true
-        run: |
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_all_cases
-      - name: Migrate cases
-        continue-on-error: true
-        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_all_cases --limit=10000
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update ${{ matrix.court }}_node_event_granicus
       - name: Clear cache
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
