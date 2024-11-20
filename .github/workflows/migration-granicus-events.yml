@@ -36,7 +36,7 @@ jobs:
         continue-on-error: true
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_event_granicus
-      - name: Get new job postings and delete ones that are outdated
+      - name: Get new or update event information from Granicus feed
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update ${{ matrix.court }}_node_event_granicus
       - name: Clear cache
