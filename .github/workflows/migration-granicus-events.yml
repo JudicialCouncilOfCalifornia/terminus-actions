@@ -1,9 +1,9 @@
-name: "Migrate granicus events every hour between 6:00a-4:00p"
+name: "Migrate granicus events 30 minutes past every hour"
 on:
   workflow_dispatch:
 
   schedule:
-    - cron:  '15 13-23 * * *'
+    - cron:  '15 * * * *'
 
 jobs:
   migrate_cases:

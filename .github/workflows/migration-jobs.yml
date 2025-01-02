@@ -1,4 +1,4 @@
-name: "Migrate job posts every 35 minutes after the hour."
+name: "Migrate job posts 35 minutes after every hour."
 on:
   workflow_dispatch:
   
