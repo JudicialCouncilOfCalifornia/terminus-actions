@@ -54,15 +54,15 @@ jobs:
       - name: Get new opinions and delete ones that are no longer needed for courts.ca.gov
         continue-on-error: true
         run: |
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update --delete ${{ matrix.court }}_node_opinion_published
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update --delete ${{ matrix.court }}_node_opinion_published
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update --delete ${{ matrix.court }}_node_opinion_published_review
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update --delete ${{ matrix.court }}_node_opinion_published_archive
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update --delete ${{ matrix.court }}_node_opinion_unpublished
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update --delete ${{ matrix.court }}_node_opinion_unpublished_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published_review
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published_archive
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_unpublished
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_unpublished_review
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_file_opinion_citing
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_media_opinion_citing
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update --delete ${{ matrix.court }}_node_opinion_citing
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_citing
       - name: Clear cache
         continue-on-error: true
         run: |
