@@ -55,7 +55,6 @@ jobs:
         continue-on-error: true
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published_review
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_published_archive
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_opinion_unpublished
