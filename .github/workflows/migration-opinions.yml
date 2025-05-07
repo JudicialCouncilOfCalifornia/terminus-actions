@@ -18,7 +18,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.2'
       - uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.PANTHEON_SSH_KEY }}
