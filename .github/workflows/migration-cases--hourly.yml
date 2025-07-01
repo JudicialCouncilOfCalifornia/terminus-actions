@@ -1,4 +1,4 @@
-name: "Migrate all Madera cases"
+name: "Migrate all cases, hourly"
 on:
   workflow_dispatch:
 
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [madera]
+        court: [madera,contracosta]
         server: [live]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
