@@ -31,6 +31,7 @@ jobs:
       - name: Stop running migrations
         continue-on-error: true
         run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_civil_cases
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_noncrim_cases
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_crim_cases
       - name: Reset migrations

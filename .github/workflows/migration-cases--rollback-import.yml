@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [santabarbara,stanislaus]
+        court: [santabarbara]
         server: [live]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
