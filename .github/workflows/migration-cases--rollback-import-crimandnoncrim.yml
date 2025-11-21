@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [santabarbara]
-        server: [live]
+        court: [stanislaus]
+        server: [stage]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
     steps:
@@ -32,17 +32,23 @@ jobs:
         continue-on-error: true
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_civil_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_noncrim_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_crim_cases
       - name: Reset migrations
         continue-on-error: true
         run: |
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_civil_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_noncrim_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_crim_cases
       - name: Rollback migrations
         continue-on-error: true
         run: |
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_civil_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_noncrim_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_crim_cases
       - name: Migrate Civil Cases
         continue-on-error: true
-        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_civil_cases
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_noncrim_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_crim_cases
       - name: Clear cache
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
