@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         court: [stanislaus]
-        server: [live]
+        server: [stage]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
     steps:
