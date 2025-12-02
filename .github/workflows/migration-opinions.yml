@@ -1,9 +1,9 @@
-name: "Migrate opinions every hour"
+name: "Migrate opinions hourly"
 on:
   workflow_dispatch:
   
   schedule:
-    - cron:  '58 * * * *'
+    - cron:  '43 * * * *'
 
 jobs:
   migrate_cases:

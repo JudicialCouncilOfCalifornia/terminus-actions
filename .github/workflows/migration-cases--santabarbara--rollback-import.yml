@@ -1,16 +1,16 @@
-name: "Migrate all cases, hourly"
+name: "Migrate cases: Santa Barbara - Rollback and Import"
 on:
   workflow_dispatch:
 
   schedule:
-    - cron:  '0 10-22/1 * * *'
+    - cron:  '0 13-14/1 * * *'
 
 jobs:
   migrate_cases:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [madera,contracosta]
+        court: [santabarbara]
         server: [live]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
@@ -31,18 +31,18 @@ jobs:
       - name: Stop running migrations
         continue-on-error: true
         run: |
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_all_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_civil_cases
       - name: Reset migrations
         continue-on-error: true
         run: |
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_all_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_civil_cases
       - name: Rollback migrations
         continue-on-error: true
         run: |
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_all_cases
-      - name: Migrate cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_civil_cases
+      - name: Migrate Civil Cases
         continue-on-error: true
-        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_all_cases --limit=10000
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_civil_cases
       - name: Clear cache
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr

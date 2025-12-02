@@ -1,4 +1,4 @@
-name: "Migrate cases - Rollback and Import"
+name: "Migrate cases: Stanislaus - Rollback and Import"
 on:
   workflow_dispatch:
 

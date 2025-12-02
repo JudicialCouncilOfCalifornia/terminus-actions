@@ -1,9 +1,9 @@
-name: "Migrate job posts 35 minutes after every hour."
+name: "Migrate job posts - 35min past"
 on:
   workflow_dispatch:
   
   schedule:
-    - cron:  '28 * * * *'
+    - cron:  '23 * * * *'
 
 jobs:
   migrate_cases:

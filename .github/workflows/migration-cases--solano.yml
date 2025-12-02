@@ -1,4 +1,4 @@
-name: "Migrate all Solano cases"
+name: "Migrate cases: Solano"
 on:
   workflow_dispatch:
 
