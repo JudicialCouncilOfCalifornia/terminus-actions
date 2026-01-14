@@ -38,7 +38,7 @@ jobs:
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset ${{ matrix.court }}_node_job
       - name: Get new job postings and delete ones that are outdated
         continue-on-error: true
-        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --update --delete ${{ matrix.court }}_node_job
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import --delete ${{ matrix.court }}_node_job
       - name: Clear cache
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
