@@ -1,4 +1,4 @@
-name: "Migrate granicus events - 30min past"
+name: "Migrate granicus events"
 on:
   workflow_dispatch:
 

@@ -1,4 +1,4 @@
-name: "Migrate job posts - 35min past"
+name: "Migrate job posts"
 on:
   workflow_dispatch:
   
