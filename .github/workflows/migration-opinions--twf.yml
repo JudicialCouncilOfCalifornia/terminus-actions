@@ -1,9 +1,9 @@
-name: "Migrate opinions (Mon & Thr delay)"
+name: "Migrate opinions (Tue/Wed/Fri)"
 on:
   workflow_dispatch:
   
   schedule:
-    - cron:  '0 18-23 * * 1,4'
+    - cron:  '0 0-2,14-23 * * 2,3,5,6'
 
 jobs:
   migrate_cases:
