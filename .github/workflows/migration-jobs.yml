@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   
   schedule:
-    - cron:  '23 * * * *'
+    - cron:  '23 * * * 1-5'
 
 jobs:
   migrate_cases:
