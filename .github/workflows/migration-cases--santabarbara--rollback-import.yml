@@ -38,15 +38,21 @@ jobs:
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_civil_cases
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_criminal_cases
-      - name: Rollback migrations
+      - name: Rollback civil cases
         continue-on-error: true
-        run: |
+        run:
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_civil_cases
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_criminal_cases
-      - name: Migrate cases
+      - name: Migrate civil cases
         continue-on-error: true
-        run: |
+        run:
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_civil_cases
+      - name: Rollback criminal cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_criminal_cases
+      - name: Migrate criminal cases
+        continue-on-error: true
+        run:
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_criminal_cases
       - name: Clear cache
         continue-on-error: true
