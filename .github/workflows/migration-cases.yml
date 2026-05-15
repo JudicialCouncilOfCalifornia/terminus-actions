@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [madera,contracosta]
-        server: [live]
+        court: [madera,contracosta,sanmateo,mariposa]
+        server: [stage]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
     steps:
