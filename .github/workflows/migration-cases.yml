@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         court: [madera,contracosta,sanmateo,mariposa]
-        server: [stage]
+        server: [epic-uat]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
     steps:
