@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [madera,contracosta,sanmateo,mariposa]
+        court: [madera,contracosta,mariposa]
         server: [epic-uat]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
