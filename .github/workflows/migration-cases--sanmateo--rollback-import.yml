@@ -1,0 +1,69 @@
+name: "Migrate cases: San Mateo - Rollback and Import"
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron:  '0 11-12/1 * * 1-5'
+
+jobs:
+  migrate_cases:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        court: [sanmateo]
+        server: [live]
+    name: ${{ matrix.court }}.${{ matrix.server }}
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PANTHEON_SSH_KEY }}
+          config: ${{ secrets.SSH_CONFIG }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+      - name: Install Terminus
+        uses: pantheon-systems/terminus-github-actions@main
+        with:
+          pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+      - name: Stop running migrations
+        continue-on-error: true
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_central_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_rwc_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_traffic_cases
+      - name: Reset migrations
+        continue-on-error: true
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_central_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_rwc_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_traffic_cases
+      - name: Rollback Central Branch cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_central_cases
+      - name: Migrate Central Branch cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_central_cases
+      - name: Rollback RWC branch cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_rwc_cases
+      - name: Migrate RWC branch cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_rwc_cases 
+      - name: Rollback traffic cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_traffic_cases
+      - name: Migrate traffic cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_traffic_cases
+      - name: Clear cache
+        continue-on-error: true
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
