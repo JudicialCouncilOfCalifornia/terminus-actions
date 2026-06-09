@@ -1,4 +1,4 @@
-name: "Run cron"
+name: "Run cron: Courts"
 on:
   workflow_dispatch:
 
@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [partners,appellate,inyo]
-        server: [develop,epic-uat,stage,live]
+        court: [courts]
+        server: [epic-uat,stage,live]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
     steps:
