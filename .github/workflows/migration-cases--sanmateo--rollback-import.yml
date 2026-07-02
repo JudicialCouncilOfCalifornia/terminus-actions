@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron:  '0 11-12/1 * * 1-5'
+    - cron: '0 6,20 * * 1-5'
 
 jobs:
   migrate_cases:
@@ -55,8 +55,8 @@ jobs:
       - name: Migrate RWC branch cases
         continue-on-error: true
         run:
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_rwc_cases 
-      - name: Rollback traffic cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_rwc_cases
+      - name: Rollback SSF cases
         continue-on-error: true
         run:
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_traffic_cases
