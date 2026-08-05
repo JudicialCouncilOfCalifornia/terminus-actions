@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [partners,appellate,inyo]
+        court: [partners,inyo]
         server: [develop,epic-uat,stage,live]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
