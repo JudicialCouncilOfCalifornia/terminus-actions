@@ -1,3 +1,0 @@
-# Deprecated workflow.
-# Please refer to `migration-cases.yml` for the cron job definition for Solano.
-# This file is intentionally commented off to prevent duplicate scheduled runs.
