@@ -1,17 +1,17 @@
-name: "Migrate cases: Solano"
+name: "Migrate cases: Mono, Contra Costa"
 on:
   workflow_dispatch:
 
   schedule:
-    - cron:  '0 7 * * 1-5'
+    - cron:  '0 10-19/1 * * 1-5'
 
 jobs:
   migrate_cases:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [solano]
-        server: [live]
+        court: [mono,contracosta]
+        server: [epic-uat]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
     steps:
@@ -46,3 +46,4 @@ jobs:
       - name: Clear cache
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
+

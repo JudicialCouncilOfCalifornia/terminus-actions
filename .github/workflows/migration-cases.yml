@@ -3,14 +3,18 @@ on:
   workflow_dispatch:
 
   schedule:
+    # All all-cases courts (live): hourly weekdays.
     - cron:  '0 10-19/1 * * 1-5'
 
 jobs:
   migrate_cases:
+    # Run this shared job on the hourly cron; allow manual dispatch too.
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.schedule == '0 10-19/1 * * 1-5' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [madera,contracosta,mariposa]
+        court: [madera,mariposa,solano]
+        # court: [madera,mariposa,solano,mono,contracosta]  # uncomment (and remove line above) when mono and contracosta are promoted from epic-uat to live
         server: [live]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
@@ -46,3 +50,4 @@ jobs:
       - name: Clear cache
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
+
