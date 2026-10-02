@@ -1,0 +1,68 @@
+name: "Migrate cases: Mono - Rollback and Import"
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate_cases:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        court: [mono]
+        # Use stage for current testing; switch to live when the split migrations
+        # are ready for production scheduling.
+        server: [stage]
+    name: ${{ matrix.court }}.${{ matrix.server }}
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PANTHEON_SSH_KEY }}
+          config: ${{ secrets.SSH_CONFIG }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+      - name: Install Terminus
+        uses: pantheon-systems/terminus-github-actions@main
+        with:
+          pantheon-machine-token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+      - name: Stop running migrations
+        continue-on-error: true
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_bridgeport_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_mammoth_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_all_cases
+      - name: Reset migrations
+        continue-on-error: true
+        run: |
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_bridgeport_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_mammoth_cases
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_all_cases
+      - name: Rollback old all-cases migration
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_all_cases
+      - name: Reset old all-cases migration after rollback
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_all_cases
+      - name: Rollback Bridgeport cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_bridgeport_cases
+      - name: Migrate Bridgeport cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_bridgeport_cases --limit=10000
+      - name: Rollback Mammoth cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:rollback case_node_mammoth_cases
+      - name: Migrate Mammoth cases
+        continue-on-error: true
+        run:
+          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:import case_node_mammoth_cases --limit=10000
+      - name: Clear cache
+        continue-on-error: true
+        run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
