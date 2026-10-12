@@ -8,9 +8,7 @@ jobs:
     strategy:
       matrix:
         court: [mono]
-        # Use stage for current testing; switch to live when the split migrations
-        # are ready for production scheduling.
-        server: [stage]
+        server: [live]
     name: ${{ matrix.court }}.${{ matrix.server }}
 
     steps:
