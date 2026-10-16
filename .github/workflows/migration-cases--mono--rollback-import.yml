@@ -30,13 +30,11 @@ jobs:
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_bridgeport_cases
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_mammoth_cases
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:stop case_node_all_cases
       - name: Reset migrations
         continue-on-error: true
         run: |
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_bridgeport_cases
           terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_mammoth_cases
-          terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- migrate:reset case_node_all_cases
       - name: Rollback old all-cases migration
         continue-on-error: true
         run:
