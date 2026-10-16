@@ -2,6 +2,9 @@ name: "Migrate cases: Mono - Rollback and Import"
 on:
   workflow_dispatch:
 
+  schedule:
+    - cron: '0 10-19/1 * * 1-5'
+
 jobs:
   migrate_cases:
     runs-on: ubuntu-latest
