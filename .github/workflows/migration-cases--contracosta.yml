@@ -1,18 +1,21 @@
-name: "Migrate cases: Mono, Contra Costa"
+name: "Migrate cases: Contra Costa"
 on:
   workflow_dispatch:
 
   schedule:
-    - cron:  '0 10-19/1 * * 1-5'
+    - cron: '12 10-19/1 * * 1-5'
 
 jobs:
   migrate_cases:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        court: [mono,contracosta]
-        server: [epic-uat]
+        court: [contracosta]
+        server: [live]
     name: ${{ matrix.court }}.${{ matrix.server }}
+    concurrency:
+      group: migrate-cases-${{ matrix.court }}-${{ matrix.server }}
+      cancel-in-progress: false
 
     steps:
       - name: Setup PHP
@@ -46,4 +49,3 @@ jobs:
       - name: Clear cache
         continue-on-error: true
         run: terminus drush jcc-${{ matrix.court }}.${{ matrix.server }} -- cr
-
